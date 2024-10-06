@@ -11,6 +11,6 @@ public class Main {
      * @param args Argumentos de la línea de comandos (no se utilizan).
      */
     public static void main(String[] args) {
-        new InterfazGrafica(); // Inicializa la interfaz gráfica  
+        new InterfazGrafica();
     }
 }
