@@ -1,4 +1,0 @@
-desayunar,2024-10-03,ALTA,true
-estudiar,2024-10-03,MEDIA,false
-jugar,2024-10-03,BAJA,false
-almorzar,2024-10-03,ALTA,false

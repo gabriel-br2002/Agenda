@@ -1,5 +1,0 @@
-LISTA DE TAREAS:
-          # desayunar     [ FECHA: 2024-10-03 ]      [ PRIORIDAD ALTA]      [ TAREA COMPLETADA]   
-          # estudiar     [ FECHA: 2024-10-03 ]      [ PRIORIDAD MEDIA]      [ TAREA NO COMPLETADA]   
-          # jugar     [ FECHA: 2024-10-03 ]      [ PRIORIDAD BAJA]      [ TAREA NO COMPLETADA]   
-          # almorzar     [ FECHA: 2024-10-03 ]      [ PRIORIDAD ALTA]      [ TAREA NO COMPLETADA]   
