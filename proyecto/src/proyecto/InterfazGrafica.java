@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.time.LocalDate;
 import java.util.List;
-
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -18,25 +17,38 @@ import javax.swing.JTextField;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+
 /**
- * Clase que representa la interfaz gráfica de una aplicación de lista de tareas.
- * Permite a los usuarios iniciar sesión, registrarse y gestionar sus tareas.
+ * Clase InterfazGrafica
+ * 
+ * Esta clase representa la interfaz gráfica de usuario (GUI) para el sistema de
+ * gestión de tareas. Permite a los usuarios iniciar sesión, registrar nuevos
+ * usuarios, y gestionar sus tareas (añadir, eliminar, modificar, completar,
+ * e imprimir la lista de tareas).
  */
 public class InterfazGrafica {
-    private JFrame ventanaPrincipal;
-    private JList<Tarea> listaTareas;
-    private DefaultListModel<Tarea> modeloTareas;
-    private ListaDeTareas tareasUsuario;
-    private JTextField campoUsuario;
-    private JTextField campoContraseña;
+    private JFrame ventanaPrincipal; // Ventana principal de la aplicación
+    private JList<Tarea> listaTareas; // Lista visual de tareas
+    private DefaultListModel<Tarea> modeloTareas; // Modelo de la lista de tareas
+    private ListaDeTareas tareasUsuario; // Lista de tareas del usuario
+    private JTextField campoUsuario; // Campo para ingresar el nombre de usuario
+    private JTextField campoContraseña; // Campo para ingresar la contraseña
 
-    private int anchoCampoLogin = 10;
-    private int anchoCampoTarea = 10;
+    private int anchoCampoLogin = 9; // Ancho de los campos de inicio de sesión
+    private int anchoCampoTarea = 9; // Ancho de los campos para tareas
+
     /**
-     * Constructor que inicializa la interfaz gráfica.
+     * Constructor de la clase InterfazGrafica.
+     * Este constructor inicializa la ventana principal y configura los
+     * componentes de la interfaz gráfica, incluyendo los campos de inicio
+     * de sesión y botones para acceder al sistema.
+     * Ejemplo de uso:
+     * <pre>
+     * InterfazGrafica interfaz = new InterfazGrafica();
+     * </pre>
      */
     public InterfazGrafica() {
-        ventanaPrincipal = new JFrame("LISTA DE TAREAS");
+        ventanaPrincipal = new JFrame("Lista De Tareas");
         ventanaPrincipal.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         ventanaPrincipal.setSize(400, 100);
         ventanaPrincipal.setLocationRelativeTo(null);
@@ -44,19 +56,19 @@ public class InterfazGrafica {
 
         modeloTareas = new DefaultListModel<>();
         listaTareas = new JList<>(modeloTareas);
-        listaTareas.setBackground(new Color(255, 255, 255));
-        listaTareas.setForeground(new Color(0, 0, 0));
+        listaTareas.setBackground(new Color(255, 211, 151));
+        listaTareas.setForeground(new Color(80, 80, 80));
 
         JPanel panelLogin = new JPanel();
-        panelLogin.setBackground(new Color(220, 220, 220));
+        panelLogin.setBackground(new Color(255, 150, 80));
         campoUsuario = new JTextField(anchoCampoLogin);
         campoContraseña = new JTextField(anchoCampoLogin);
         JButton btnIniciarSesion = new JButton("Iniciar Sesión");
         JButton btnRegistrar = new JButton("Registrar");
 
-        btnIniciarSesion.setBackground(new Color(60, 120, 240));
+        btnIniciarSesion.setBackground(new Color(102, 200, 100));
         btnIniciarSesion.setForeground(Color.WHITE);
-        btnRegistrar.setBackground(new Color(60, 120, 240));
+        btnRegistrar.setBackground(new Color(90, 160, 255));
         btnRegistrar.setForeground(Color.WHITE);
 
         panelLogin.add(new JLabel("Usuario:"));
@@ -72,9 +84,11 @@ public class InterfazGrafica {
 
         ventanaPrincipal.setVisible(true);
     }
+
     /**
-     * Método que maneja el inicio de sesión de un usuario.
-     * Verifica las credenciales y carga la lista de tareas del usuario si son correctas.
+     * Método para iniciar sesión en la aplicación.
+     * Este método verifica las credenciales ingresadas por el usuario. Si son correctas,
+     * carga la lista de tareas del usuario y muestra la interfaz de gestión de tareas.
      */
     private void iniciarSesion() {
         String usuario = campoUsuario.getText();
@@ -84,15 +98,17 @@ public class InterfazGrafica {
         for (Usuario user : usuarios) {
             if (user.getNombre().equals(usuario) && user.getContraseña().equals(contraseña)) {
                 tareasUsuario = user.getListaDeTareas();
-                mostrarListaDeTareas();
+                mostrarListaDeTareas(); // Muestra la interfaz de tareas
                 return;
             }
         }
-        JOptionPane.showMessageDialog(ventanaPrincipal, "Usuario o contraseña incorrectos.");
+        JOptionPane.showMessageDialog(ventanaPrincipal, "Usuario o contraseña incorrectos."); // Mensaje de error
     }
+
     /**
-     * Método que maneja el registro de un nuevo usuario.
-     * Guarda el nuevo usuario y carga su lista de tareas.
+     * Método para registrar un nuevo usuario.
+     * Este método permite a los nuevos usuarios crear una cuenta si ingresan un
+     * nombre de usuario y una contraseña. Una vez registrado, se carga su lista de tareas.
      */
     private void registrarUsuario() {
         String usuario = campoUsuario.getText();
@@ -100,20 +116,22 @@ public class InterfazGrafica {
 
         if (!usuario.isEmpty() && !contraseña.isEmpty()) {
             Usuario nuevoUsuario = new Usuario(usuario, contraseña);
-            nuevoUsuario.guardarUsuarios();
-            tareasUsuario = nuevoUsuario.getListaDeTareas();
-            mostrarListaDeTareas();
+            nuevoUsuario.guardarUsuarios(); // Guarda el nuevo usuario
+            tareasUsuario = nuevoUsuario.getListaDeTareas(); // Carga la lista de tareas
+            mostrarListaDeTareas(); // Muestra la interfaz de tareas
         } else {
             JOptionPane.showMessageDialog(ventanaPrincipal, "Por favor ingrese usuario y contraseña.");
         }
     }
+
     /**
-    * Muestra la lista de tareas del usuario en la interfaz gráfica.
-    * Configura los botones y paneles necesarios para gestionar las tareas.
-    */
+     * Método para mostrar la lista de tareas del usuario.
+     * Este método cambia la interfaz para mostrar las opciones de gestión de tareas,
+     * incluyendo añadir, eliminar y modificar tareas.
+     */
     private void mostrarListaDeTareas() {
-        ventanaPrincipal.getContentPane().removeAll();
-        ventanaPrincipal.setSize(650, 450);
+        ventanaPrincipal.getContentPane().removeAll(); // Limpia la ventana
+        ventanaPrincipal.setSize(650, 450); // Ajusta el tamaño de la ventana
         JButton btnAñadir = new JButton("AÑADIR TAREA");
         JButton btnFinalizar = new JButton("FINALIZAR");
         JButton btnCompletar = new JButton("COMPLETAR TAREA");
@@ -121,19 +139,21 @@ public class InterfazGrafica {
         JButton btnModificar = new JButton("MODIFICAR TAREA");
         JButton btnImprimir = new JButton("IMPRIMIR LISTA");
 
-        btnAñadir.setBackground(new Color(60, 120, 240));
+        // Configuración de colores y acciones de botones
+        btnAñadir.setBackground(new Color(110, 220, 80));
         btnAñadir.setForeground(Color.WHITE);
-        btnCompletar.setBackground(new Color(60, 120, 240));
+        btnCompletar.setBackground(new Color(110, 220, 80));
         btnCompletar.setForeground(Color.WHITE);
-        btnEliminar.setBackground(new Color(60, 120, 240));
+        btnEliminar.setBackground(new Color(240, 200, 140));
         btnEliminar.setForeground(Color.WHITE);
-        btnModificar.setBackground(new Color(60, 120, 240));
+        btnModificar.setBackground(new Color(240, 200, 140));
         btnModificar.setForeground(Color.WHITE);
-        btnImprimir.setBackground(new Color(60, 120, 240));
+        btnImprimir.setBackground(new Color(240, 200, 140));
         btnImprimir.setForeground(Color.WHITE);
-        btnFinalizar.setBackground(new Color(240, 60, 60));
+        btnFinalizar.setBackground(new Color(255, 83, 84));
         btnFinalizar.setForeground(Color.WHITE);
 
+        // Agrega acciones a los botones
         btnAñadir.addActionListener(e -> añadirTarea());
         btnCompletar.addActionListener(e -> completarTarea());
         btnEliminar.addActionListener(e -> eliminarTarea());
@@ -141,13 +161,14 @@ public class InterfazGrafica {
         btnImprimir.addActionListener(e -> imprimirLista());
         btnFinalizar.addActionListener(e -> finalizarPrograma());
 
-        modeloTareas.clear();
+        modeloTareas.clear(); // Limpia la lista de tareas
         for (Tarea tarea : tareasUsuario.getTareas()) {
-            modeloTareas.addElement(tarea);
+            modeloTareas.addElement(tarea); // Agrega tareas al modelo
         }
 
+        // Configuración de paneles
         JPanel panelSuperior = new JPanel();
-        panelSuperior.setBackground(new Color(220, 220, 220));
+        panelSuperior.setBackground(new Color(255, 167, 53));
         panelSuperior.add(btnAñadir);
         panelSuperior.add(btnFinalizar);
 
@@ -155,27 +176,29 @@ public class InterfazGrafica {
         panelCentral.add(new JScrollPane(listaTareas), BorderLayout.CENTER);
 
         JPanel panelInferior = new JPanel();
-        panelInferior.setBackground(new Color(220, 220, 220));
+        panelInferior.setBackground(new Color(255, 167, 53));
         panelInferior.add(btnCompletar);
         panelInferior.add(btnEliminar);
         panelInferior.add(btnModificar);
         panelInferior.add(btnImprimir);
 
+        // Agrega paneles a la ventana
         ventanaPrincipal.add(panelSuperior, BorderLayout.NORTH);
         ventanaPrincipal.add(panelCentral, BorderLayout.CENTER);
         ventanaPrincipal.add(panelInferior, BorderLayout.SOUTH);
 
-        ventanaPrincipal.revalidate();
-        ventanaPrincipal.repaint();
+        ventanaPrincipal.revalidate(); // Actualiza la interfaz
+        ventanaPrincipal.repaint(); // Redibuja la interfaz
     }
+
     /**
-    * Añade una nueva tarea a la lista de tareas del usuario.
-    * Solicita al usuario que ingrese los detalles de la tarea a través de un cuadro de diálogo.
-    * Si los datos son válidos, crea una nueva tarea y la agrega a la lista.
-    */
+     * Método para añadir una nueva tarea a la lista.
+     * Este método solicita al usuario que ingrese el nombre, la fecha límite y la
+     * prioridad de la tarea a través de un cuadro de diálogo.
+     */
     private void añadirTarea() {
-        JTextField campoNombre = new JTextField(10);
-        JTextField campoFecha = new JTextField(10);
+        JTextField campoNombre = new JTextField(6);
+        JTextField campoFecha = new JTextField(6);
         String[] prioridades = { "ALTA", "MEDIA", "BAJA" };
         JComboBox<String> comboPrioridad = new JComboBox<>(prioridades);
 
@@ -196,45 +219,49 @@ public class InterfazGrafica {
             try {
                 Tarea tarea = new Tarea(nombre, LocalDate.parse(fechaString), prioridad);
                 tareasUsuario.agregarTarea(tarea);
-                modeloTareas.addElement(tarea);
+                modeloTareas.addElement(tarea); // Agrega la tarea a la lista
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(ventanaPrincipal, "ERROR AL AÑADIR TAREA: " + e.getMessage());
             }
         }
     }
+
     /**
-    * Marca la tarea seleccionada como completada.
-    * Si no se ha seleccionado ninguna tarea, muestra un mensaje de error.
-    */
+     * Método para marcar una tarea como completada.
+     * Este método marca la tarea seleccionada en la lista como completada y actualiza
+     * la interfaz.
+     */
     private void completarTarea() {
         Tarea tareaSeleccionada = listaTareas.getSelectedValue();
         if (tareaSeleccionada != null) {
             tareaSeleccionada.setCompletada(true);
             modeloTareas.removeElement(tareaSeleccionada);
-            modeloTareas.addElement(tareaSeleccionada);
-            tareasUsuario.guardarTareas();
+            modeloTareas.addElement(tareaSeleccionada); // Actualiza la visualización
+            tareasUsuario.guardarTareas(); // Guarda los cambios
         } else {
             JOptionPane.showMessageDialog(ventanaPrincipal, "POR FAVOR SELECCIONE UNA TAREA PARA COMPLETAR.");
         }
     }
+
     /**
-    * Elimina la tarea seleccionada de la lista de tareas del usuario.
-    * Si no se ha seleccionado ninguna tarea, muestra un mensaje de error.
-    */
+     * Método para eliminar una tarea de la lista.
+     * Este método elimina la tarea seleccionada en la lista de tareas.
+     */
     private void eliminarTarea() {
         Tarea tareaSeleccionada = listaTareas.getSelectedValue();
         if (tareaSeleccionada != null) {
             tareasUsuario.eliminarTarea(tareaSeleccionada);
-            modeloTareas.removeElement(tareaSeleccionada);
+            modeloTareas.removeElement(tareaSeleccionada); // Actualiza la lista visual
         } else {
             JOptionPane.showMessageDialog(ventanaPrincipal, "POR FAVOR SELECCIONE UNA TAREA PARA ELIMINAR");
         }
     }
+
     /**
-    * Modifica los detalles de la tarea seleccionada.
-    * Permite al usuario cambiar el nombre, la fecha y la prioridad de la tarea seleccionada.
-    * Si no se ha seleccionado ninguna tarea, muestra un mensaje de error.
-    */
+     * Método para modificar una tarea existente.
+     * Este método permite al usuario modificar el nombre, la fecha y la prioridad de
+     * la tarea seleccionada.
+     */
     private void modificarTarea() {
         Tarea tareaSeleccionada = listaTareas.getSelectedValue();
         if (tareaSeleccionada != null) {
@@ -264,8 +291,8 @@ public class InterfazGrafica {
                     tareaSeleccionada.setNombre(nuevoNombre);
                     tareaSeleccionada.setFecha(LocalDate.parse(nuevaFechaString));
                     tareaSeleccionada.setPrioridad(nuevaPrioridad);
-                    tareasUsuario.guardarTareas();
-                    modeloTareas.set(listaTareas.getSelectedIndex(), tareaSeleccionada);
+                    tareasUsuario.guardarTareas(); // Guarda los cambios
+                    modeloTareas.set(listaTareas.getSelectedIndex(), tareaSeleccionada); // Actualiza la lista
                 } catch (Exception e) {
                     JOptionPane.showMessageDialog(ventanaPrincipal, "ERROR AL MODIFICAR LA TAREA: " + e.getMessage());
                 }
@@ -274,18 +301,19 @@ public class InterfazGrafica {
             JOptionPane.showMessageDialog(ventanaPrincipal, "Por favor seleccione una tarea para modificar.");
         }
     }
+
     /**
-    * Imprime la lista de tareas del usuario en un archivo de texto.
-    * Guarda la lista de tareas en un archivo llamado "LISTA DE TAREAS.txt".
-    * Muestra un mensaje de confirmación si la operación es exitosa, o un mensaje de error si falla.
-    */
+     * Método para imprimir la lista de tareas a un archivo de texto.
+     * Este método genera un archivo de texto que contiene todas las tareas actuales
+     * del usuario.
+     */
     private void imprimirLista() {
         String destinoTXT = "LISTA DE TAREAS.txt";
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(destinoTXT))) {
             writer.write("LISTA DE TAREAS:");
             writer.newLine();
             for (Tarea tarea : tareasUsuario.getTareas()) {
-                writer.write(tarea.toString());
+                writer.write(tarea.toString()); // Escribe cada tarea en el archivo
                 writer.newLine();
             }
             JOptionPane.showMessageDialog(ventanaPrincipal, "La lista de tareas ha sido exportada a " + destinoTXT);
@@ -293,11 +321,13 @@ public class InterfazGrafica {
             JOptionPane.showMessageDialog(ventanaPrincipal, "Error al generar el archivo de texto: " + e.getMessage());
         }
     }
+
     /**
-     * Finaliza el programa cerrando la ventana principal y terminando la ejecución.
-    */
+     * Método para finalizar el programa.
+     * Este método cierra la ventana y finaliza la ejecución de la aplicación.
+     */
     private void finalizarPrograma() {
-        ventanaPrincipal.dispose();
-        System.exit(0);
+        ventanaPrincipal.dispose(); // Cierra la ventana
+        System.exit(0); // Finaliza la aplicación
     }
 }
